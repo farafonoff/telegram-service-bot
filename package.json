@@ -1,0 +1,28 @@
+{
+  "name": "servicebot-telegram-api",
+  "main": "app/bot.js",
+  "dependencies": {
+    "express": "~4.0.0",
+    "body-parser": "~1.0.1",
+    "request": "~2.71.0"
+  },
+  "description": "simple bot for executing linux commands via telegram.",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/farafonoff/telegram-service-bot.git"
+  },
+  "keywords": [
+    "linux",
+    "telegram",
+    "uptime"
+  ],
+  "author": "Artem Farafonov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/farafonoff/telegram-service-bot/issues"
+  }
+}
