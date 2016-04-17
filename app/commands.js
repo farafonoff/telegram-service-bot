@@ -10,27 +10,29 @@ function exec_helper(command, resolve, reject) {
 		}
 	})
 }
+
+
 var commands = {
-	help: new Promise(function(resolve, reject) {
+	help: 	function(resolve, reject) {
 		resolve("/temp /uptime /help /free /df /uname")
-	}),
+	},
 
-	temp: new Promise(function(resolve, reject) {
+	temp: 	function(resolve, reject) {
 		exec_helper('sensors', resolve, reject);
-	}), 
+	}, 
 
-	uptime: new Promise(function(resolve, reject) {
+	uptime: function(resolve, reject) {
 		exec_helper('uptime', resolve, reject);
-	}), 
-	free: new Promise(function(resolve, reject) {
+	}, 
+	free:   function(resolve, reject) {
 		exec_helper('free', resolve, reject);
-	}), 
-	df: new Promise(function(resolve, reject) {
+	}, 
+	df: 	function(resolve, reject) {
 		exec_helper('df -h', resolve, reject);
-	}), 
-	uname: new Promise(function(resolve, reject) {
+	}, 
+	uname: 	function(resolve, reject) {
 		exec_helper('uname -a', resolve, reject);
-	}), 
+	}, 
 }
 
 commands.start = commands.help

@@ -40,11 +40,16 @@ function send_response(message, response) {
 function processMsg(message) {
 	console.log(message.text)
 	if (message.text.lastIndexOf('/')===0) {
-		cmd = message.text.substring(1)
-		commands[cmd].then(
-			function(success) {send_response(message, success)},
-			function(error) {send_response(message, 'command failed '+error )}
-		);
+		var cmd = message.text.substring(1)
+		var promis = new Promise(commands[cmd])
+		if (promis) {
+			promis.then(
+				function(success) {send_response(message, success)},
+				function(error) {send_response(message, 'command failed '+error )}
+			);
+		} else {
+			console.log(message);
+		}
 	}
 }
 
