@@ -5,7 +5,7 @@ function exec_helper(command, resolve, reject) {
 		if (err==null) {
 			resolve(stdout+'\n\n'+help_string)
 		} else {
-			console.log(error)
+			console.log(err)
 			reject(stderr+'\n\n'+help_string)
 		}
 	})
@@ -32,7 +32,10 @@ var commands = {
 	}, 
 	uname: 	function(resolve, reject) {
 		exec_helper('uname -a', resolve, reject);
-	}, 
+	},
+	youtube_helper: (vid)=>function(resolve, reject) {
+	  exec_helper(`DISPLAY=:0 sudo -u artem vlc --started-from-file "${vid}"`, resolve, reject);
+	}
 }
 
 commands.start = commands.help

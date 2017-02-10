@@ -39,23 +39,29 @@ function send_response(message, response) {
 
 function processMsg(message) {
 	console.log(message.text)
+	var promis;
 	if (message.text.lastIndexOf('/')===0) {
 		var cmd = message.text.substring(1)
-		var promis = new Promise(commands[cmd])
-		if (promis) {
-			promis.then(
+		promis = new Promise(commands[cmd])
+	} else if (message.text.indexOf('youtu')>-1) {
+		promis = new Promise(commands.youtube_helper(message.text));
+	}
+	if (promis) {
+		promis.then(
 				function(success) {send_response(message, success)},
 				function(error) {send_response(message, 'command failed '+error )}
-			);
-		} else {
-			console.log(message);
-		}
+				);
+	} else {
+		console.log(message);
 	}
+
 }
 
 // ROUTES FOR OUR API
 // =============================================================================
 var router = express.Router();              // get an instance of the express Router
+//var MjpegProxy = require('mjpeg-proxy').MjpegProxy;
+
 
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/test', function(req, res) {
@@ -66,7 +72,7 @@ router.get('/test', function(req, res) {
 	processMsg(message)	
 	res.json({ok:true})
 })
-
+// .get('/turtles.jpg',new MjpegProxy('http://192.168.8.131:8080/video').proxyRequest);
 
 // more routes for our API will happen here
 
