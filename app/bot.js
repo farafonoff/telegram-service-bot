@@ -38,6 +38,10 @@ function send_response(message, response) {
 }
 
 function processMsg(message) {
+	if (message==null) {
+		console.warn("no message at processMsg");
+		return;
+	}
 	console.log(message.text)
 	var promis;
 	if (message.text.lastIndexOf('/')===0) {

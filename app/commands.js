@@ -34,6 +34,10 @@ var commands = {
 		exec_helper('uname -a', resolve, reject);
 	},
 	youtube_helper: (vid)=>function(resolve, reject) {
+		if (vid.indexOf('"')!=-1) {
+			reject("Not pawned");
+			return;
+		}
 	  exec_helper(`DISPLAY=:0 sudo -u artem vlc --started-from-file "${vid}"`, resolve, reject);
 	}
 }
