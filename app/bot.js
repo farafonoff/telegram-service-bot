@@ -45,10 +45,12 @@ function processMsg(message) {
 	console.log(message.text)
 	var promis;
 	if (message.text.lastIndexOf('/')===0) {
-		var cmd = message.text.substring(1)
-		promis = new Promise(commands[cmd])
+		let command = message.text.substring(1)
+		let args = cmd.split(':');
+		let cmd = args[0];
+		promis = commands[cmd](args, (text) => {send_response(message, text);});
 	} else if (message.text.indexOf('youtu')>-1) {
-		promis = new Promise(commands.youtube_helper(message.text));
+		promis = commands.youtube_helper(message.text);
 	}
 	if (promis) {
 		promis.then(

@@ -1,44 +1,49 @@
-var cp = require('child_process')
+var cp = require('child_process');
+var skype = require('./skype');
 var help_string = "/temp /uptime /help /free /df /uname"
-function exec_helper(command, resolve, reject) {
-	cp.exec(command, function (err, stdout, stderr) { 
-		if (err==null) {
-			resolve(stdout+'\n\n'+help_string)
-		} else {
-			console.log(err)
-			reject(stderr+'\n\n'+help_string)
-		}
-	})
+function exec_helper(command) {
+	return new Promise((resolve, reject) => {
+		cp.exec(command, function (err, stdout, stderr) {
+			if (err == null) {
+				resolve(stdout + '\n\n' + help_string)
+			} else {
+				console.log(err)
+				reject(stderr + '\n\n' + help_string)
+			}
+		})
+	});
 }
 
 
 var commands = {
-	help: 	function(resolve, reject) {
-		resolve("/temp /uptime /help /free /df /uname")
+	help: function (resolve, reject) {
+		return Promise.resolve("/temp /uptime /help /free /df /uname");
 	},
 
-	temp: 	function(resolve, reject) {
-		exec_helper('sensors', resolve, reject);
-	}, 
-
-	uptime: function(resolve, reject) {
-		exec_helper('uptime', resolve, reject);
-	}, 
-	free:   function(resolve, reject) {
-		exec_helper('free', resolve, reject);
-	}, 
-	df: 	function(resolve, reject) {
-		exec_helper('df -h', resolve, reject);
-	}, 
-	uname: 	function(resolve, reject) {
-		exec_helper('uname -a', resolve, reject);
+	temp: function () {
+		return exec_helper('sensors');
 	},
-	youtube_helper: (vid)=>function(resolve, reject) {
-		if (vid.indexOf('"')!=-1) {
-			reject("Not pawned");
-			return;
+
+	uptime: function () {
+		return exec_helper('uptime');
+	},
+	free: function () {
+		return exec_helper('free');
+	},
+	df: function () {
+		return exec_helper('df -h');
+	},
+	uname: function () {
+		return exec_helper('uname -a');
+	},
+	youtube_helper: (vid) => {
+		if (vid.indexOf('"') != -1) {
+			Promise.reject("Not pawned");
 		}
-	  exec_helper(`DISPLAY=:0 sudo -u artem vlc --started-from-file "${vid}"`, resolve, reject);
+		return exec_helper(`DISPLAY=:0 sudo -u artem vlc --started-from-file "${vid}"`, resolve, reject);
+	},
+	skype: (args, responder) => {
+		skype.start(args[1], args[2], responder);
 	}
 }
 

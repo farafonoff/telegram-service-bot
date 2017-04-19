@@ -2,14 +2,20 @@
   "name": "servicebot-telegram-api",
   "main": "app/bot.js",
   "dependencies": {
-    "express": "~4.0.0",
+    "big-integer": "^1.6.20",
+    "bluebird": "^3.5.0",
     "body-parser": "~1.0.1",
-    "request": "~2.71.0"
+    "cheerio": "^0.22.0",
+    "express": "~4.0.0",
+    "incident": "^1.1.1",
+    "js-sha256": "^0.5.0",
+    "lodash": "^4.17.4",
+    "request": "^2.81.0"
   },
   "description": "simple bot for executing linux commands via telegram.",
   "version": "0.0.1",
   "scripts": {
-		"dev": "node app/bot.js",
+    "dev": "node app/bot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
