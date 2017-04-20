@@ -31,11 +31,11 @@ function start(login, password, onMessage) {
         });*/
 
         // Log every error
-        api.on("error", (err) => {
+        /*api.on("error", (err) => {
             //console.error("An error was detected:");
             onMessage(`skype error ${err}`)
             //console.error(err);
-        });
+        });*/
         api.listen().then(() => {
             connections[login] = api;
             return api.setStatus("Online")
@@ -47,4 +47,4 @@ function start(login, password, onMessage) {
 }
 
 module.exports.start = start;
-start('artem_farafonov', 'optanex14', (text) => { console.log(text) });
+

@@ -1,5 +1,6 @@
 var cp = require('child_process');
 var skype = require('./skype');
+var config = requier('config');
 var help_string = "/temp /uptime /help /free /df /uname"
 function exec_helper(command) {
 	return new Promise((resolve, reject) => {
@@ -16,6 +17,7 @@ function exec_helper(command) {
 
 
 var commands = {
+	_skypeChats: [],
 	help: function (resolve, reject) {
 		return Promise.resolve("/temp /uptime /help /free /df /uname");
 	},
@@ -42,8 +44,20 @@ var commands = {
 		}
 		return exec_helper(`DISPLAY=:0 sudo -u artem vlc --started-from-file "${vid}"`, resolve, reject);
 	},
-	skype: (args, responder) => {
+	skype: (args, responder, message) => {
 		skype.start(args[1], args[2], responder);
+		_skypeChats.push({login: arg[1], password: arg[2], id: message.chat.id});
+		config.saveConfig({
+			chats: _skypeChats
+		});
+	},
+	_loadChats: (sendToChat, chats) => {
+		if (chats) {
+			_skypeChats = chats;
+		}
+		_skypeChats.forEach(chat => {
+			skype.start(chat.login, chat.password, (msg) => {sendToChat(chat.id, msg);})
+		})
 	}
 }
 
