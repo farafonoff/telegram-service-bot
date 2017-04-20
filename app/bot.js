@@ -11,6 +11,7 @@ var bodyParser = require('body-parser');
 var request = require('request')
 var commands = require('./commands');
 var process = require('process');
+var URL;//should be assigned on init
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -46,7 +47,7 @@ function processMsg(message) {
 	var promis;
 	if (message.text.lastIndexOf('/') === 0) {
 		let command = message.text.substring(1)
-		let args = cmd.split(':');
+		let args = command.split(':');
 		let cmd = args[0];
 		promis = commands[cmd](args, (text) => { send_response(message, text); }, message);
 	} else if (message.text.indexOf('youtu') > -1) {
@@ -89,7 +90,8 @@ app.use('/', router);
 // START THE SERVER
 // =============================================================================
 config.getConfig().then((configObj) => {
-	var URL = "https://api.telegram.org/bot" + configObj.apikey + "/";
+	console.log(configObj);
+	URL = "https://api.telegram.org/bot" + configObj.apikey + "/";
 
 	var myUrl = configObj.server_url;
 	

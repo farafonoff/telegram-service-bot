@@ -1,18 +1,21 @@
 (function () {
     const bb = require('bluebird');
     const fs = bb.promisifyAll(require('fs'));
-    const configPath = '../config.json';
+    const configPath = 'config.json';
+		const path = require('path');
     var configObj = false;
 
     function getConfig() {
         if (!configObj) {
-            return loadConfig(configPath);
+            return loadConfig();
         }
         return Promise.resolve(configObj);
     }
 
-    function loadConfig(path) {
-        return fs.readFileAsync(path)
+    function loadConfig() {
+				const absPath = path.resolve(configPath);
+				console.log('Using config at ' + absPath);
+        return fs.readFileAsync(absPath)
         .then((content) => configObj = JSON.parse(content))
         .catch(() => configObj = {
             skypeChats: []
@@ -23,7 +26,7 @@
         if (cfg) {
             Object.assign(configObj, cfg);
         }
-        fs.writeFile(configPath, JSON.stringify(configObj)).catch((err) => {
+        fs.writeFileAsync(configPath, JSON.stringify(configObj)).catch((err) => {
             console.error(err);
         });
     }
