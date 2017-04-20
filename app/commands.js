@@ -1,6 +1,6 @@
 var cp = require('child_process');
 var skype = require('./skype');
-var config = requier('config');
+var config = require('./config');
 var help_string = "/temp /uptime /help /free /df /uname"
 function exec_helper(command) {
 	return new Promise((resolve, reject) => {
@@ -51,11 +51,11 @@ var commands = {
 			chats: _skypeChats
 		});
 	},
-	_loadChats: (sendToChat, chats) => {
+	_loadChats: function(sendToChat, chats) {
 		if (chats) {
-			_skypeChats = chats;
+			this._skypeChats = chats;
 		}
-		_skypeChats.forEach(chat => {
+		this._skypeChats.forEach(chat => {
 			skype.start(chat.login, chat.password, (msg) => {sendToChat(chat.id, msg);})
 		})
 	}

@@ -100,6 +100,8 @@ config.getConfig().then((configObj) => {
 			console.log(body)
 			app.listen(port);
 			console.log('Magic happens on port ' + port);
+		} else {
+			console.error( error, response.statusCode );
 		}
 	})
 })

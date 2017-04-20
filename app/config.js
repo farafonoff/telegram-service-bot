@@ -12,7 +12,7 @@
     }
 
     function loadConfig(path) {
-        return fs.readFile(path)
+        return fs.readFileAsync(path)
         .then((content) => configObj = JSON.parse(content))
         .catch(() => configObj = {
             skypeChats: []
