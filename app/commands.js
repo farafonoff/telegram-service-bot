@@ -1,7 +1,8 @@
 var cp = require('child_process');
-var skype = require('./skype');
+const auth = require('./auth')
+//var skype = require('./skype');
 var config = require('./config');
-var help_string = "/temp /uptime /help /free /df /uname"
+var help_string = "/temp /uptime /help /free /df /uname /login"
 var _ = require('lodash');
 
 function exec_helper(command) {
@@ -21,7 +22,7 @@ function exec_helper(command) {
 var commands = {
 	_skypeChats: [],
 	help: function (resolve, reject) {
-		return Promise.resolve("/temp /uptime /help /free /df /uname");
+		return Promise.resolve(help_string);
 	},
 
 	temp: function () {
@@ -40,13 +41,21 @@ var commands = {
 	uname: function () {
 		return exec_helper('uname -a');
 	},
-	youtube_helper: (vid) => {
+	login: function (args, responder, message) {
+		var login = args[1];
+		var password = args[2];
+		auth.login(message.chat_id, login, password)
+			.then(success => {
+				return 'Logged in as ' + login;
+			});
+	}
+	/*youtube_helper: (vid) => {
 		if (vid.indexOf('"') != -1) {
 			Promise.reject("Not pawned");
 		}
 		return exec_helper(`DISPLAY=:0 sudo -u artem vlc --started-from-file "${vid}"`, resolve, reject);
-	},
-	skype: function(args, responder, message) {
+	},*/
+	/*skype: function(args, responder, message) {
 		skype.start(args[1], args[2], responder);
 		var chatObj = {login: args[1], password: args[2], id: message.chat.id}
 		var oldChat = this._skypeChats.find(chat => chat.id === message.chat.id&&chat.login === chatObj.login);
@@ -66,7 +75,7 @@ var commands = {
 		this._skypeChats.forEach(chat => {
 			skype.start(chat.login, chat.password, (msg) => {sendToChat(chat.id, msg);})
 		})
-	}
+	}*/
 }
 
 commands.start = commands.help

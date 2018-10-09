@@ -1,6 +1,5 @@
 //var config = require('../config')
 const config = require('./config')
-
 // BASE SETUP
 // =============================================================================
 
@@ -18,7 +17,7 @@ var URL;//should be assigned on init
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var port = process.env.PORT || 8080;        // set our port
+var port = process.env.PORT || 18080;        // set our port
 
 function sendToChat(chat_id, response) {
 	request.post(
@@ -50,9 +49,9 @@ function processMsg(message) {
 		let args = command.split(':');
 		let cmd = args[0];
 		promis = commands[cmd](args, (text) => { send_response(message, text); }, message);
-	} else if (message.text.indexOf('youtu') > -1) {
+	} /*else if (message.text.indexOf('youtu') > -1) {
 		promis = commands.youtube_helper(message.text);
-	}
+	}*/
 	if (promis) {
 		promis.then(
 			function (success) { send_response(message, success) },
@@ -95,7 +94,7 @@ config.getConfig().then((configObj) => {
 
 	var myUrl = configObj.server_url;
 	
-	commands._loadChats(sendToChat, config.chats);
+	//commands._loadChats(sendToChat, config.chats);
 
 	request(URL + 'setWebhook?url=' + myUrl, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
