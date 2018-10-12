@@ -16,7 +16,7 @@ function login(key, name, password) {
 }
 
 function getUser(key) {
-	return session[key] && session[key].user;
+	return sessions[key] && sessions[key].user;
 }
 
 module.exports.login = login;

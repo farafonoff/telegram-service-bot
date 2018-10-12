@@ -2,8 +2,10 @@ var cp = require('child_process');
 const auth = require('./auth')
 //var skype = require('./skype');
 var config = require('./config');
-var help_string = "/temp /uptime /help /free /df /uname /login"
+var help_string = "/temp /uptime /help /free /df /uname /login /youtube_on /youtube_off /youtube_status"
 var _ = require('lodash');
+
+var good_user = 'artem';
 
 function exec_helper(command) {
 	return new Promise((resolve, reject) => {
@@ -16,6 +18,14 @@ function exec_helper(command) {
 			}
 		})
 	});
+}
+
+function admin_helper(chat_id, command) {
+	if (auth.getUser(chat_id) === good_user) {
+		return exec_helper(command);
+	} else {
+		return Promise.reject('please login');
+	}
 }
 
 
@@ -44,10 +54,20 @@ var commands = {
 	login: function (args, responder, message) {
 		var login = args[1];
 		var password = args[2];
-		auth.login(message.chat_id, login, password)
+		return auth.login(message.chat.id, login, password)
+			.then(m => console.log(m))
 			.then(success => {
 				return 'Logged in as ' + login;
 			});
+	},
+	youtube_on: function (args, responder, message) {
+		return admin_helper(message.chat.id, '/etc/hosts-blocklists/youtube enable');
+	},
+	youtube_off: function (args, responder, message) {
+		return admin_helper(message.chat.id, '/etc/hosts-blocklists/youtube disable');
+	},
+	youtube_status: function (args, responder, message) {
+		return exec_helper('/etc/hosts-blocklists/youtube status');
 	}
 	/*youtube_helper: (vid) => {
 		if (vid.indexOf('"') != -1) {
